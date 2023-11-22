@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"os/signal"
 	"path/filepath"
+	"regexp"
 	"syscall"
 
 	"github.com/spf13/cobra"
@@ -60,6 +61,10 @@ var devCmd = &cobra.Command{
 			if err != nil {
 				return fmt.Errorf("Error creating link to file: %w", err)
 			}
+			version, _ := getSqldVersion()
+			if err := os.WriteFile(filepath.Join(tempDir, ".version"), []byte(extractSemver(version)), 0644); err != nil {
+				return fmt.Errorf("Error writing version file: %w", err)
+			}
 		}
 
 		addr := fmt.Sprintf("0.0.0.0:%d", devPort)
@@ -103,4 +108,9 @@ var devCmd = &cobra.Command{
 
 		return nil
 	},
+}
+
+func extractSemver(version string) string {
+	regex := regexp.MustCompile(`\b\d+\.\d+\.\d+\b`)
+	return regex.FindString(version)
 }
