@@ -34,7 +34,7 @@ var devCmd = &cobra.Command{
 
 		version, err := getSqldVersion()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, sqldNotFoundErr)
+			fmt.Fprint(os.Stderr, sqldNotFoundErr)
 			return err
 		}
 		if sqldVersion {
@@ -83,7 +83,7 @@ var devCmd = &cobra.Command{
 		// Start the server process
 		err = sqld.Start()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, sqldNotFoundErr)
+			fmt.Fprint(os.Stderr, sqldNotFoundErr)
 			return err
 		}
 		fmt.Printf("sqld listening on port %s.\n", internal.Emph(devPort))
